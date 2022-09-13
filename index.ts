@@ -79,6 +79,7 @@ const parseAndSendEvents = async (events: PluginEventExtra[], { config, global }
 const plugin: Plugin<Migrator3000MetaInput> = {
     jobs: {
         '[ADVANCED] Force restart': async (_, { storage, jobs }) => {
+            console.log('Triger force restart');
             await storage.del('is_export_running')
             const cursor = await storage.get('timestamp_cursor', null)
             if (cursor) {
@@ -99,6 +100,7 @@ const plugin: Plugin<Migrator3000MetaInput> = {
     runEveryMinute: async ({ global, jobs, storage, cache }) => {
         const currentDate = new Date()
         const lastRun = await cache.get('last_run', null)
+        console.log('run every minute ' + lastRun.toString());
         if (!lastRun || currentDate.getTime() - Number(lastRun) > TEN_MINUTES) {
             // this "magic" key is added via the historical export upgrade
             const isExportRunning = await storage.get('is_export_running', false)
